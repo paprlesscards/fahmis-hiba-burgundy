@@ -363,7 +363,12 @@ body{display:flex;justify-content:center;align-items:center;padding:12px;font-fa
 <div class="pc-div">✦</div>
 <div class="pc-row"><div class="pc-unit"><div class="pc-num" id="pd">--</div><div class="pc-ulbl">Days</div></div><div class="pc-unit"><div class="pc-num" id="ph">--</div><div class="pc-ulbl">Hours</div></div><div class="pc-unit"><div class="pc-num" id="pm">--</div><div class="pc-ulbl">Minutes</div></div><div class="pc-unit"><div class="pc-num" id="ps">--</div><div class="pc-ulbl">Seconds</div></div></div>
 <p class="rsvp-label">Kindly confirm your attendance</p>
-<a class="rsvp-btn" href="https://docs.google.com/forms/d/e/1FAIpQLSeB-PRLZ_i8gUIzP7BS2mIxRgnBxdZWXU6UNHUTfrtzreDo5A/viewform" target="_blank">RSVP NOW</a><br>
+<a id="rsvpBtn"
+   class="rsvp-btn"
+   href="https://docs.google.com/forms/d/e/1FAIpQLSeB-PRLZ_i8gUIzP7BS2mIxRgnBxdZWXU6UNHUTfrtzreDo5A/viewform"
+   target="_blank">
+   RSVP NOW
+</a><br>
 <a class="location-link" href="https://maps.google.com/?q=Paramount+Auditorium+Kodiyathur" target="_blank"><svg class="location-icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z"/></svg>CLICK HERE: <strong>PARAMOUNT AUDITORIUM</strong></a>
 <div class="pc-foot">
     <audio id="bgMusic" autoplay loop playsinline>
@@ -430,9 +435,11 @@ for(let i=0;i<16;i++){
 
 
 /* ===== Wedding Analytics ===== */
-(function () {
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzz4iLji4Cx5CiGOVezNe6LB1ets-ZDbblNLPvUWUy3io7tx0iBeITjoUdal9C1XxJV/exec";
 
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyRJh5V-huPsnaJCldGmirLXgxc19S7eLj7f7mBcVZP3G79xeJ6V-BDR7YZnrRnQ1eA/exec";
+
+    
+(function () {
     try {
         const KEY = "weddingVisitorId";
         let visitorId = localStorage.getItem(KEY);
@@ -469,7 +476,7 @@ for(let i=0;i<16;i++){
             ua
         });
 
-        if (!SCRIPT_URL.includes("PASTE_YOUR")) {
+        if (!SCRIPT_URL.includes("https://script.google.com/macros/s/AKfycbwOgwvW5ARrWCfSLA7M2uV2GzcYt5qqh9AbuAkokxY-q7-7aCE5p_ua1MpDTI0Zk_Ai/exec")) {
             fetch(SCRIPT_URL + "?" + params.toString(), {mode:"no-cors"})
                 .catch(()=>{});
         } else {
@@ -479,7 +486,20 @@ for(let i=0;i<16;i++){
         console.error("Analytics error", e);
     }
 })();
+const rsvpBtn = document.getElementById("rsvpBtn");
 
+rsvpBtn.addEventListener("click", function () {
+
+    fetch(
+        SCRIPT_URL + "?event=rsvp_click",
+        {
+            method: "GET",
+            mode: "no-cors",
+            keepalive: true
+        }
+    ).catch(console.error);
+
+});
 </script>
 </div>
 
