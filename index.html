@@ -384,8 +384,28 @@ function tick(){const d=target-new Date();if(d<=0)return;pd.textContent=pad(Math
 tick();setInterval(tick,1000);
 
 const music=document.getElementById("bgMusic"),btn=document.getElementById("musicBtn");
-music.volume=.35;
-music.play().then(()=>btn.classList.add("playing")).catch(()=>{});
+music.volume = .35;
+
+let musicTimer;
+
+function playMusicFor30Seconds() {
+    clearTimeout(musicTimer);
+
+    music.play()
+        .then(() => {
+            btn.classList.add("playing");
+
+            // Stop after 30 seconds
+            musicTimer = setTimeout(() => {
+                music.pause();
+                music.currentTime = 0;   // Optional: rewind to the beginning
+                btn.classList.remove("playing");
+            }, 30000);
+        })
+        .catch(() => {});
+}
+
+playMusicFor30Seconds();
 const envelope=document.getElementById("envelope");
 const screen=document.getElementById("envelopeScreen");
 const invitation=document.getElementById("invitationContainer");
@@ -396,7 +416,9 @@ if(opened)return;
 opened=true;
 envelope.classList.add("open");
 setTimeout(()=>invitation.classList.remove("hidden"),350);
-try{await music.play();btn.classList.add("playing");}catch(e){}
+try{
+    playMusicFor30Seconds();
+}catch(e){}
 setTimeout(()=>{screen.style.transition="opacity .8s ease";screen.style.opacity="0";setTimeout(()=>{screen.remove();invitation.classList.add("show");},800);},1200);
 });
 
@@ -404,7 +426,18 @@ async function startMusic(){}
 document.addEventListener("click",startMusic,{once:true});
 document.addEventListener("touchstart",startMusic,{once:true});
 document.addEventListener("scroll",startMusic,{once:true});
-btn.addEventListener("click",async(e)=>{e.stopPropagation();if(music.paused){await music.play();btn.classList.add("playing");}else{music.pause();btn.classList.remove("playing");}});
+btn.addEventListener("click", async (e) => {
+    e.stopPropagation();
+
+    if (music.paused) {
+        playMusicFor30Seconds();
+    } else {
+        clearTimeout(musicTimer);
+        music.pause();
+        music.currentTime = 0;
+        btn.classList.remove("playing");
+    }
+});
 /* Light Blue Falling Petals */
 
 const petals = document.getElementById("petals");
