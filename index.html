@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wedding Invitation</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&family=Jost:wght@300;400&family=Monsieur+La+Doulaise&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&family=Jost:wght@300;400&family=Monsieur+La+Doulaise&family=Scheherazade+New:wght@400&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:100%;min-height:100%;background:#2b0f16}
+body{display:flex;justify-content:center;align-items:center;padding:12px;font-family:'Cormorant Garamond',serif}
+.wrap{width:100%;display:flex;justify-content:center}
+.pc{width:min(100%,430px);padding:clamp(28px,6vw,48px) clamp(18px,6vw,36px) clamp(32px,6vw,52px);background:linear-gradient(to bottom,#4a0f1d 0%,#5b1624 40%,#2b0f16 100%);text-align:center;position:relative}
+.pc:before,.pc:after{content:"";position:absolute;left:20px;right:20px;height:2px;background:linear-gradient(90deg,transparent,#b8963e,transparent)}
+.pc:before{top:12px}.pc:after{bottom:12px}
+.pc-orn{margin-bottom:22px;color:#b8963e;letter-spacing:12px}
+.pc-bismillah{
+    font-family:'Scheherazade New', serif;
+    font-size:clamp(14px,5.5vw,21px);
+    font-weight:400;
+    color:#8d6a1f;
+    direction:rtl;
+    line-height:1.7;
+    margin-bottom:16px;
+}
+.pc-lbl{font:300 clamp(9px,2vw,10px) 'Jost',sans-serif;letter-spacing:3px;text-transform:uppercase;line-height:2;color:#d8c08a}
+.pc-names{
+    font-family:'Monsieur La Doulaise', cursive;
+    font-size:clamp(25px,13vw,50px);
+    font-weight:400;
+    line-height:1.15;
+    color:#f7d67a;
+    margin-top:10px;
+}
+.pc-amp{
+    display:block;
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    font-size:28px;
+    color:#b8963e;
+    margin:6px 0;
+}
+.pc-parent-inline{
+    margin:4px 0 10px;
+    font-family:'Cormorant Garamond', serif;
+    font-size:16px;
+    font-style:italic;
+    font-weight:300;
+    color:#d7bf88;
+    line-height:1.4;
+}
+
+.pc-parent-label{
+    font-family:'Jost', sans-serif;
+    font-size:9px;
+    font-weight:300;
+    letter-spacing:3px;
+    text-transform:uppercase;
+    color:#cdb57c;
+}
+.pc-date,.pc-time{font:300 clamp(9px,2vw,10px) 'Jost',sans-serif;letter-spacing:3px;text-transform:uppercase;color:#d8c08a}
+.pc-date{margin-top:18px}.pc-time{margin:8px 0 22px}
+.pc-div{margin:2px 0 10px;color:#b8963e}
+.pc-row{display:flex;background:rgba(77,17,28,.45);border:1px solid rgba(184,150,62,.2);margin-bottom:28px;padding:18px 0}
+.pc-unit{flex:1;position:relative}
+.pc-unit:not(:last-child):after{content:"";position:absolute;right:0;top:8px;bottom:8px;width:1px;background:rgba(184,150,62,.18)}
+.pc-num{font-size:clamp(24px,7vw,38px);color:#f4d27a}
+.pc-ulbl{font:400 8px 'Jost',sans-serif;letter-spacing:1px;text-transform:uppercase;color:#d8c08a}
+.rsvp-label{font:300 10px 'Jost',sans-serif;letter-spacing:3px;text-transform:uppercase;color:#cdb57c;margin-bottom:14px}
+.rsvp-btn{
+    display:inline-block;
+    padding:14px 34px;
+    text-decoration:none;
+
+    border:1px solid rgba(184,150,62,.5);
+    border-radius:30px;   /* Rounded edges */
+
+    background:#4a0f1d;
+    color:#f4d27a;
+
+    font:400 11px 'Jost',sans-serif;
+    letter-spacing:3px;
+    text-transform:uppercase;
+
+    transition:all .3s ease;
+
+    animation:rsvpPulse 2.2s ease-in-out infinite;
+}
+.rsvp-btn:hover{
+    transform:scale(1.05);
+    box-shadow:0 6px 18px rgba(184,150,62,.25);
+}
+#envelopeScreen{
+    position:fixed;
+    inset:0;
+    background:linear-gradient(180deg,#3a0f19,#2b0f16);
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    z-index:9999;
+}
+
+#envelope{
+    position:relative;
+    width:280px;
+    height:190px;
+    cursor:pointer;
+    perspective:1200px;
+}
+
+.env-back{
+    position:absolute;
+    width:100%;
+    height:100%;
+    background:#6b1426;
+    border:2px solid #d4b36a;
+    border-radius:8px;
+    overflow:hidden;
+}
+
+.env-flap{
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:#7a1a2d;
+    border:2px solid #d4b36a;
+    clip-path:polygon(0 0,100% 0,50% 52%);
+    transform-origin:top;
+    transition:transform .9s cubic-bezier(.22,1,.36,1);
+}
+
+.letter{
+    position:absolute;
+    left:15px;
+    right:15px;
+    bottom:15px;
+    height:155px;
+    background:#fff8ef;
+    border-radius:6px;
+    box-shadow:0 10px 20px rgba(0,0,0,.12);
+    transition:transform 1.5s cubic-bezier(.22,1,.36,1);transition-delay:.2s;
+}
+
+.touchText{
+    margin-top:35px;
+    letter-spacing:5px;
+    font:300 12px Jost,sans-serif;
+    color:#d7bf88;
+    text-transform:uppercase;
+    animation:pulse 2s infinite;
+}
+
+.hidden{
+    display:none;
+}
+
+#envelope.open .env-flap{
+    transform:rotateX(-165deg);
+}
+
+#envelope.open .letter{
+    transform:translateY(-240px) scale(1.02) rotateX(2deg);
+}
+
+@keyframes pulse{
+    0%,100%{opacity:.5}
+    50%{opacity:1}
+} 
+.location-link{display:inline-flex;align-items:center;justify-content:center;gap:6px;margin-top:20px;text-decoration:none;color:#f4d27a;font:400 13px 'Jost',sans-serif}
+.location-icon{width:16px;height:16px;fill:#b8963e;animation:pinBounce 2s infinite}
+@keyframes pinBounce{0%,100%{transform:translateY(0)}20%{transform:translateY(-3px) scale(1.08)}40%{transform:translateY(0)}60%{transform:translateY(-2px)}}
+.pc-foot{
+    margin-top:26px;
+    display:flex;
+    align-items:center;
+    justify-content:flex-end;
+    color:#b8963e;
+    opacity:.6;
+}
+@keyframes rsvpPulse{0%,100%{transform:scale(1);box-shadow:0 0 0 rgba(184,150,62,0)}50%{transform:scale(1.04);box-shadow:0 0 14px rgba(184,150,62,.28)}}
+
+#musicBtn{
+    position:static;
+    width:72px;
+    height:72px;
+    border:none;
+    background:transparent;
+    box-shadow:none;
+    border-radius:0;
+    padding:0;
+    cursor:pointer;
+    overflow:visible;
+    z-index: 100;
+}
+
+#musicBtn img{
+    width:100%;
+    height:100%;
+    display:block;
+    object-fit:contain;
+    background:transparent;
+    opacity: 1;
+    filter:
+      contrast(1.12)
+      drop-shadow(0 6px 12px rgba(0,0,0,.12));
+}
+#musicBtn.playing img{
+    animation:spinImage 8s linear infinite;
+}
+@keyframes spinImage{
+    from{transform:rotate(0deg);}
+    to{transform:rotate(360deg);}
+}
+@keyframes rotateDisc{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+@keyframes glowPulse{0%,100%{box-shadow:0 0 10px rgba(184,150,62,.35)}50%{box-shadow:0 0 24px rgba(184,150,62,.65),0 0 40px rgba(184,150,62,.25)}}
+
+.music-wrap{
+    position:absolute;
+    right:10px;
+    bottom: 20px;
+
+    width:60px;
+    height:60px;
+
+    z-index:100;
+}
+
+.music-ring{
+    position:absolute;
+
+    width:100px;
+    height:120px;
+
+    left:50%;
+    top:50%;
+
+    transform:translate(-50%,-50%);
+
+    pointer-events:none;
+}
+.music-ring text{font-family:'Cormorant Garamond',serif;font-size:11px;letter-spacing:1px;fill:#695011;}
+
+
+@keyframes spinCenter{from{transform:translate(-50%,-50%) rotate(0)}to{transform:translate(-50%,-50%) rotate(360deg)}}
+
+
+#invitationContainer{
+    opacity:0;
+    visibility:hidden;
+    transition:opacity 1.5s ease;
+}
+#invitationContainer.show{
+    opacity:1;
+    visibility:visible;
+}
+
+/* Falling Petals */
+.petals{
+    position:fixed;
+    inset:0;
+    overflow:hidden;
+    pointer-events:none;
+    z-index:5;
+}
+
+.petal{
+    position:absolute;
+    top:-60px;
+    width:18px;
+    height:24px;
+    opacity:.75;
+    background:linear-gradient(180deg,#8b1e3f,#5e0f23);
+    border-radius:60% 40% 60% 40%;
+    transform-origin:center;
+    filter:drop-shadow(0 2px 4px rgba(160,220,255,.35));
+    animation:
+        fall linear infinite,
+        sway ease-in-out infinite,
+        spin linear infinite;
+}
+
+@keyframes fall{
+    from{
+        transform:translateY(-60px);
+    }
+    to{
+        transform:translateY(calc(100vh + 80px));
+    }
+}
+
+@keyframes sway{
+    0%,100%{
+        margin-left:-20px;
+    }
+    50%{
+        margin-left:20px;
+    }
+}
+
+@keyframes spin{
+    from{
+        rotate:0deg;
+    }
+    to{
+        rotate:360deg;
+    }
+}
+
+</style></head><body>
+<div id="envelopeScreen">
+
+    <div id="envelope">
+
+        <div class="env-back"></div>
+
+        <div class="letter"></div>
+
+        <div class="env-flap"></div>
+
+    </div>
+
+    <p class="touchText">
+        Touch to Open
+    </p>
+
+</div>
+<div class="petals" id="petals"></div>
+<div id="invitationContainer">
+    <div class="wrap">
+<div class="pc">
+
+    <div class="music-wrap">
+        <button id="musicBtn" title="Play / Pause Music">
+            <img src="Gemini_Generated_Image_ofn8feofn8feofn8-removebg-preview.png" alt="Music">
+        </button>
+    </div>
+<div class="pc-bismillah">
+    بِسْمِ ٱللَّٰهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ
+</div>
+<!--div class="pc-orn">✦ ✦ ✦</div-->
+<p class="pc-lbl">You are invited to celebrate the</p><p class="pc-lbl">Wedding Reception of</p>
+<h1 class="pc-names">
+    Fahmis Abdulla
+</h1>
+
+<p class="pc-parent-inline">
+    (Son of Mr. Abdulla P &amp; Mrs. Kadeeja AK)
+</p>
+
+<div class="pc-amp">&amp;</div>
+
+<h1 class="pc-names">
+    Hiba Tasnim
+</h1>
+<p class="pc-date">Sunday · 19 July 2026</p><p class="pc-time">Reception · 5 PM – 8 PM</p>
+<div class="pc-div">✦</div>
+<div class="pc-row"><div class="pc-unit"><div class="pc-num" id="pd">--</div><div class="pc-ulbl">Days</div></div><div class="pc-unit"><div class="pc-num" id="ph">--</div><div class="pc-ulbl">Hours</div></div><div class="pc-unit"><div class="pc-num" id="pm">--</div><div class="pc-ulbl">Minutes</div></div><div class="pc-unit"><div class="pc-num" id="ps">--</div><div class="pc-ulbl">Seconds</div></div></div>
+<p class="rsvp-label">Kindly confirm your attendance</p>
+<a class="rsvp-btn" href="https://docs.google.com/forms/d/e/1FAIpQLSeB-PRLZ_i8gUIzP7BS2mIxRgnBxdZWXU6UNHUTfrtzreDo5A/viewform" target="_blank">RSVP NOW</a><br>
+<a class="location-link" href="https://maps.google.com/?q=Paramount+Auditorium+Kodiyathur" target="_blank"><svg class="location-icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z"/></svg>Click here: <strong>Paramount Auditorium</strong></a>
+<div class="pc-foot">
+    <audio id="bgMusic" autoplay loop playsinline>
+        <source src="music.mp3" type="audio/mpeg">
+    </audio>
+</div>
+
+
+
+<script>
+const target=new Date("2026-07-19T17:00:00"),pad=n=>String(n).padStart(2,"0");
+function tick(){const d=target-new Date();if(d<=0)return;pd.textContent=pad(Math.floor(d/86400000));ph.textContent=pad(Math.floor((d%86400000)/3600000));pm.textContent=pad(Math.floor((d%3600000)/60000));ps.textContent=pad(Math.floor((d%60000)/1000));}
+tick();setInterval(tick,1000);
+
+const music=document.getElementById("bgMusic"),btn=document.getElementById("musicBtn");
+music.volume=.35;
+music.play().then(()=>btn.classList.add("playing")).catch(()=>{});
+const envelope=document.getElementById("envelope");
+const screen=document.getElementById("envelopeScreen");
+const invitation=document.getElementById("invitationContainer");
+let opened=false;
+
+envelope.addEventListener("click",async()=>{
+if(opened)return;
+opened=true;
+envelope.classList.add("open");
+setTimeout(()=>invitation.classList.remove("hidden"),350);
+try{await music.play();btn.classList.add("playing");}catch(e){}
+setTimeout(()=>{screen.style.transition="opacity .8s ease";screen.style.opacity="0";setTimeout(()=>{screen.remove();invitation.classList.add("show");},800);},1200);
+});
+
+async function startMusic(){}
+document.addEventListener("click",startMusic,{once:true});
+document.addEventListener("touchstart",startMusic,{once:true});
+document.addEventListener("scroll",startMusic,{once:true});
+btn.addEventListener("click",async(e)=>{e.stopPropagation();if(music.paused){await music.play();btn.classList.add("playing");}else{music.pause();btn.classList.remove("playing");}});
+/* Light Blue Falling Petals */
+
+const petals = document.getElementById("petals");
+
+for(let i=0;i<16;i++){
+
+    const p=document.createElement("div");
+    p.className="petal";
+
+    p.style.left=Math.random()*100+"vw";
+
+    const size=10+Math.random()*16;
+
+    p.style.width=size+"px";
+    p.style.height=size*1.3+"px";
+
+    p.style.animationDuration =
+    `${20 + Math.random() * 15}s,
+     ${8 + Math.random() * 5}s,
+     ${12 + Math.random() * 8}s`;
+
+    p.style.animationDelay=`-${Math.random()*15}s`;
+
+    p.style.opacity=0.4+Math.random()*0.5;
+
+    petals.appendChild(p);
+}
+</script>
+</div>
+
+</body></html>
