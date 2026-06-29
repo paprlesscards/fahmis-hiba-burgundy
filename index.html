@@ -427,6 +427,59 @@ for(let i=0;i<16;i++){
 
     petals.appendChild(p);
 }
+
+
+/* ===== Wedding Analytics ===== */
+(function () {
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzz4iLji4Cx5CiGOVezNe6LB1ets-ZDbblNLPvUWUy3io7tx0iBeITjoUdal9C1XxJV/exec";
+
+    try {
+        const KEY = "weddingVisitorId";
+        let visitorId = localStorage.getItem(KEY);
+        if (!visitorId) {
+            visitorId = (crypto.randomUUID ? crypto.randomUUID() :
+                Math.random().toString(36).substring(2)+Date.now());
+            localStorage.setItem(KEY, visitorId);
+        }
+
+        const ua = navigator.userAgent;
+        const device = /Mobi|Android|iPhone|iPad/i.test(ua)
+            ? (/iPad/i.test(ua) ? "Tablet" : "Mobile")
+            : "Desktop";
+
+        let browser = "Other";
+        if (ua.includes("Edg")) browser = "Edge";
+        else if (ua.includes("Chrome")) browser = "Chrome";
+        else if (ua.includes("Safari")) browser = "Safari";
+        else if (ua.includes("Firefox")) browser = "Firefox";
+
+        let os = "Other";
+        if (ua.includes("Windows")) os = "Windows";
+        else if (ua.includes("Mac")) os = "macOS";
+        else if (ua.includes("Android")) os = "Android";
+        else if (/iPhone|iPad/.test(ua)) os = "iOS";
+
+        const params = new URLSearchParams({
+            id: visitorId,
+            device,
+            browser,
+            os,
+            lang: navigator.language || "",
+            referrer: document.referrer || "Direct",
+            ua
+        });
+
+        if (!SCRIPT_URL.includes("PASTE_YOUR")) {
+            fetch(SCRIPT_URL + "?" + params.toString(), {mode:"no-cors"})
+                .catch(()=>{});
+        } else {
+            console.log("Analytics disabled. Add your Apps Script URL to SCRIPT_URL.");
+        }
+    } catch(e){
+        console.error("Analytics error", e);
+    }
+})();
+
 </script>
 </div>
 
