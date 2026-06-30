@@ -675,7 +675,11 @@ envelope.addEventListener("click",async()=>{
             invitation.classList.add("show");
 
             // Start auto scroll after invitation is visible
-            setTimeout(startAutoScroll, 2000);
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    setTimeout(startAutoScroll, 1500);
+                });
+            });
 
         }, 800);
 
@@ -799,45 +803,46 @@ document.documentElement.style.scrollBehavior = "smooth";
 let autoScrolling = false;
 let animationId = null;
 
+function easeInOut(t) {
+    return t < 0.5
+        ? 2 * t * t
+        : 1 - Math.pow(-2 * t + 2, 2) / 2;
+}
+
 function startAutoScroll() {
 
     if (autoScrolling) return;
 
-    function waitUntilReady() {
+    autoScrolling = true;
 
-        const maxScroll =
-            document.documentElement.scrollHeight -
-            window.innerHeight;
+    const startY = window.pageYOffset;
+    const endY = document.documentElement.scrollHeight - window.innerHeight;
 
-        // Page not fully laid out yet
-        if (maxScroll <= 5) {
-            requestAnimationFrame(waitUntilReady);
-            return;
-        }
+    const duration = 15000; // 15 seconds
 
-        autoScrolling = true;
-        animationId = requestAnimationFrame(scrollStep);
-    }
+    let startTime = null;
 
-    function scrollStep() {
+    function animate(timestamp) {
 
         if (!autoScrolling) return;
 
-        const maxScroll =
-            document.documentElement.scrollHeight -
-            window.innerHeight;
+        if (!startTime) startTime = timestamp;
 
-        if (window.scrollY >= maxScroll - 2) {
+        const elapsed = timestamp - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+
+        const y = startY + (endY - startY) * easeInOut(progress);
+
+        window.scrollTo(0, y);
+
+        if (progress < 1) {
+            animationId = requestAnimationFrame(animate);
+        } else {
             stopAutoScroll();
-            return;
         }
-
-        window.scrollBy(0, 0.45);
-
-        animationId = requestAnimationFrame(scrollStep);
     }
 
-    waitUntilReady();
+    requestAnimationFrame(animate);
 }
 
 function stopAutoScroll() {
@@ -856,9 +861,7 @@ function stopAutoScroll() {
     "mousedown",
     "keydown"
 ].forEach(event => {
-    window.addEventListener(event, stopAutoScroll, {
-        passive: true
-    });
+    window.addEventListener(event, stopAutoScroll, { passive: true });
 });
 </script>
 </div>
