@@ -47,7 +47,7 @@ body{display:flex;justify-content:center;align-items:center;padding:12px;font-fa
     font-size:12px;
     font-style:italic;
     font-weight:300;
-    color:#d7bf88;
+    color:rgba(243, 218, 152, 0.92);
     line-height:1.4;
 }
 
@@ -59,37 +59,127 @@ body{display:flex;justify-content:center;align-items:center;padding:12px;font-fa
     text-transform:uppercase;
     color:#cdb57c;
 }
-.pc-date,.pc-time{font:300 clamp(9px,2vw,10px) 'Jost',sans-serif;letter-spacing:3px;text-transform:uppercase;color:#d8c08a}
-.pc-date{margin-top:18px}.pc-time{margin:8px 0 22px}
-.pc-div{margin:2px 0 10px;color:#b8963e}
-.pc-row{display:flex;background:rgba(77,17,28,.45);border:1px solid rgba(184,150,62,.2);margin-bottom:28px;padding:18px 0}
+/* .pc-div{
+    margin:14px 0 16px;
+    color:#b8963e;
+    font-size:14px;
+} */
+.pc-row{
+    display:flex;
+    background:rgba(77,17,28,.45);
+    border:1px solid rgba(184,150,62,.2);
+    margin-bottom:22px;
+    padding:15px 0;
+    margin-top:18px;
+}
 .pc-unit{flex:1;position:relative}
-.pc-unit:not(:last-child):after{content:"";position:absolute;right:0;top:8px;bottom:8px;width:1px;background:rgba(184,150,62,.18)}
-.pc-num{font-size:clamp(24px,7vw,38px);color:#f4d27a}
+.pc-unit:not(:last-child)::after{
+    content:"";
+    position:absolute;
+    right:0;
+    top:10px;
+    bottom:10px;
+    width:1px;
+    background:rgba(212,179,106,.35);
+}
+.pc-num{
+    font-size:clamp(22px,6.5vw,34px);
+    color:#f4d27a;
+}
 .pc-ulbl{font:400 8px 'Jost',sans-serif;letter-spacing:1px;text-transform:uppercase;color:#d8c08a}
-.rsvp-label{font:300 10px 'Jost',sans-serif;letter-spacing:3px;text-transform:uppercase;color:#cdb57c;margin-bottom:14px}
+
+/* RSVP Section */
+.rsvp-label{
+    font-family:'Jost',sans-serif;
+    font-size:10px;
+    font-weight:300;
+    letter-spacing:5px;
+    text-transform:uppercase;
+    color:#cdb57c;
+    margin:8px 0 20px;
+    margin-top:12px;
+}
 .rsvp-btn{
-    display:inline-block;
-    padding:14px 34px;
+    display:inline-flex;
+    justify-content:center;
+    align-items:center;
+
+    min-width:125px;
+    height:48px;
+
+    padding:0 28px;
+
+    border-radius:999px;
+
     text-decoration:none;
 
-    border:1px solid rgba(184,150,62,.5);
-    border-radius:30px;   /* Rounded edges */
-
-    background:#4a0f1d;
-    color:#f4d27a;
-
-    font:400 11px 'Jost',sans-serif;
-    letter-spacing:3px;
+    font-family:'Jost',sans-serif;
+    font-size:11px;
+    font-weight:400;
+    letter-spacing:2px;
     text-transform:uppercase;
 
-    transition:all .3s ease;
+    color:#f4d27a;
 
-    animation:rsvpPulse 2.2s ease-in-out infinite;
+    background:linear-gradient(
+        180deg,
+        rgba(255,255,255,.03),
+        rgba(255,255,255,.01)
+    );
+
+    border:0.8px solid rgba(212,179,106,.42);
+
+    transition:all .35s ease;
+    position:relative;
+    overflow:hidden;
 }
 .rsvp-btn:hover{
-    transform:scale(1.05);
-    box-shadow:0 6px 18px rgba(184,150,62,.25);
+
+    transform:translateY(-2px);
+
+    border-color:#d4b36a;
+
+    background:rgba(212,179,106,.04);
+
+    box-shadow:
+        0 0 18px rgba(212,179,106,.12),
+        0 8px 18px rgba(0,0,0,.18);
+}
+
+.rsvp-btn::before{
+    content:"";
+    position:absolute;
+    top:0;
+    left:-120%;
+    width:60%;
+    height:100%;
+
+    background:linear-gradient(
+        90deg,
+        transparent,
+        rgba(255,255,255,.08),
+        transparent
+    );
+
+    transition:left .8s ease;
+}
+
+.rsvp-btn:hover::before{
+    left:160%;
+}
+
+.action-buttons{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:18px;
+    flex-wrap:wrap;
+}
+
+.action-buttons .rsvp-btn{
+    min-width:125px; 
+    text-align:center;
+    padding:14px 30px;
 }
 #envelopeScreen{
     position:fixed;
@@ -181,36 +271,41 @@ body{display:flex;justify-content:center;align-items:center;padding:12px;font-fa
     color:#b8963e;
     opacity:.6;
 }
-@keyframes rsvpPulse{0%,100%{transform:scale(1);box-shadow:0 0 0 rgba(184,150,62,0)}50%{transform:scale(1.04);box-shadow:0 0 14px rgba(184,150,62,.28)}}
+@keyframes rsvpPulse{
 
+    0%,100%{
+        box-shadow:
+            0 2px 8px rgba(0,0,0,.15),
+            0 0 6px rgba(212,179,106,.05);
+    }
+
+    50%{
+        box-shadow:
+            0 2px 10px rgba(0,0,0,.18),
+            0 0 10px rgba(212,179,106,.10);
+    }
+
+}
 #musicBtn{
     position:static;
     width:72px;
     height:72px;
-    border:none;
+
     background:transparent;
-    box-shadow:none;
-    border-radius:0;
-    padding:0;
+
+    border:none;
+
     cursor:pointer;
-    overflow:visible;
-    z-index: 100;
 }
 
 #musicBtn img{
-    width:100%;
-    height:100%;
-    display:block;
-    object-fit:contain;
-    background:transparent;
-    opacity: 1;
-    filter:
-      contrast(1.12)
-      drop-shadow(0 6px 12px rgba(0,0,0,.12));
+    width:75%;
+    height:75%;
 }
 #musicBtn.playing img{
     animation:spinImage 8s linear infinite;
 }
+
 @keyframes spinImage{
     from{transform:rotate(0deg);}
     to{transform:rotate(360deg);}
@@ -221,7 +316,7 @@ body{display:flex;justify-content:center;align-items:center;padding:12px;font-fa
 .music-wrap{
     position:absolute;
     right:10px;
-    bottom: 20px;
+    bottom:20px;
 
     width:60px;
     height:60px;
@@ -310,6 +405,118 @@ body{display:flex;justify-content:center;align-items:center;padding:12px;font-fa
     }
 }
 
+.location-btn{
+    background:transparent;
+}
+
+.location-btn:hover{
+    background:rgba(212,179,106,.08);
+
+    border-color:#d4b36a;
+
+    transform:translateY(-2px);
+
+    box-shadow:
+        0 4px 10px rgba(0,0,0,.12);
+}
+
+/* ===========================
+   Event Section
+=========================== */
+
+.event-section{
+    margin:28px 0 24px;
+    text-align:center;
+}
+
+/* Date */
+
+.event-date{
+    font-family:'Jost',sans-serif;
+    font-size:13px;
+    font-weight:300;
+    letter-spacing:3px;
+    text-transform:uppercase;
+    color:#d8c08a;
+    margin-bottom:16px;
+    line-height:1.4;
+}
+
+/* Divider */
+
+.event-divider{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin:12px 0;
+}
+
+.event-divider::before,
+.event-divider::after{
+    content:"";
+    width:46px;
+    height:1px;
+    background:rgba(212,179,106,.28);
+}
+
+.event-divider span{
+    margin:0 10px;
+    color:#b8963e;
+    font-size:14px;
+}
+
+/* Labels */
+
+.event-label,
+.venue-label{
+    font-family:'Jost',sans-serif;
+    font-size:10px;
+    font-weight:300;
+    letter-spacing:5px;
+    text-transform:uppercase;
+    color:#d8c08a;
+}
+
+.event-label{
+    margin-bottom:6px;
+}
+
+.venue-label{
+    margin-bottom:6px;
+}
+
+/* Time */
+
+.event-time{
+    font-family:'Cormorant Garamond',serif;
+    font-size:18px;
+    font-weight:400;
+    color:#f7d67a;
+    line-height:1.2;
+    margin-bottom:2px;
+}
+
+/* Venue */
+
+.venue-name{
+    font-family:'Cormorant Garamond',serif;
+    font-size:18px;
+    font-weight:400;
+    color:#f7d67a;
+    line-height:1.2;
+    margin-bottom:4px;
+}
+
+/* Location */
+
+.venue-location{
+    font-family:'Jost',sans-serif;
+    font-size:10px;
+    font-weight:300;
+    letter-spacing:3px;
+    text-transform:uppercase;
+    color:#d8c08a;
+}
 </style></head><body>
 <div id="envelopeScreen">
 
@@ -359,17 +566,55 @@ body{display:flex;justify-content:center;align-items:center;padding:12px;font-fa
 <p class="pc-parent-inline">
     (Daughter of Mr. Abdul Nasir K &amp; Mrs. Rahna C)
 </p>
-<p class="pc-date">Sunday · 19 July 2026</p><p class="pc-time">Reception · 5 PM – 8 PM</p>
-<div class="pc-div">✦</div>
+<div class="event-section">
+
+    <p class="event-date">
+        Sunday · 19 July 2026
+    </p>
+
+    <div class="event-divider">
+        <span>✦</span>
+    </div>
+
+    <p class="event-label">
+        Reception
+    </p>
+
+    <p class="event-time">
+        5:00 PM – 8:00 PM
+    </p>
+
+    <div class="event-divider">
+        <span>✦</span>
+    </div>
+
+    <p class="venue-label">
+        Venue
+    </p>
+
+    <h3 class="venue-name">
+        Paramount Auditorium
+    </h3>
+</div>
 <div class="pc-row"><div class="pc-unit"><div class="pc-num" id="pd">--</div><div class="pc-ulbl">Days</div></div><div class="pc-unit"><div class="pc-num" id="ph">--</div><div class="pc-ulbl">Hours</div></div><div class="pc-unit"><div class="pc-num" id="pm">--</div><div class="pc-ulbl">Minutes</div></div><div class="pc-unit"><div class="pc-num" id="ps">--</div><div class="pc-ulbl">Seconds</div></div></div>
 <p class="rsvp-label">Kindly confirm your attendance</p>
-<a id="rsvpBtn"
-   class="rsvp-btn"
-   href="https://docs.google.com/forms/d/e/1FAIpQLSeB-PRLZ_i8gUIzP7BS2mIxRgnBxdZWXU6UNHUTfrtzreDo5A/viewform"
-   target="_blank">
-   RSVP NOW
-</a><br>
-<a class="location-link" href="https://maps.google.com/?q=Paramount+Auditorium+Kodiyathur" target="_blank"><svg class="location-icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z"/></svg>CLICK HERE: <strong>PARAMOUNT AUDITORIUM</strong></a>
+
+<div class="action-buttons">
+
+    <a id="rsvpBtn"
+       class="rsvp-btn location-btn"
+       href="https://docs.google.com/forms/d/e/1FAIpQLSeB-PRLZ_i8gUIzP7BS2mIxRgnBxdZWXU6UNHUTfrtzreDo5A/viewform"
+       target="_blank">
+       RSVP
+    </a>
+
+    <a class="rsvp-btn location-btn"
+       href="https://maps.google.com/?q=Paramount+Auditorium+Kodiyathur"
+       target="_blank">
+       LOCATION
+    </a>
+
+</div>
 <div class="pc-foot">
     <audio id="bgMusic" autoplay loop playsinline>
         <source src="music.mp3" type="audio/mpeg">
