@@ -9,8 +9,8 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{width:100%;min-height:100%;background:#2b0f16}
-body{display:flex;justify-content:center;align-items:center;padding:12px;font-family:'Cormorant Garamond',serif}
-.wrap{width:100%;display:flex;justify-content:center}
+body{display:block;background:#2b0f16;justify-content:center;align-items:center;padding:12px;font-family:'Cormorant Garamond',serif}
+.wrap{display:flex;justify-content:center}
 .pc{width:min(100%,430px);padding:clamp(28px,6vw,48px) clamp(18px,6vw,36px) clamp(32px,6vw,52px);background:linear-gradient(to bottom,#4a0f1d 0%,#5b1624 40%,#2b0f16 100%);text-align:center;position:relative}
 .pc:before,.pc:after{content:"";position:absolute;left:20px;right:20px;height:2px;background:linear-gradient(90deg,transparent,#b8963e,transparent)}
 .pc:before{top:12px}.pc:after{bottom:12px}
@@ -796,37 +796,70 @@ rsvpBtn.addEventListener("click", function () {
 
 document.documentElement.style.scrollBehavior = "smooth";
 
-let autoScroll;
-
+let autoScrolling = false;
+let animationId = null;
 
 function startAutoScroll() {
 
-    autoScroll = setInterval(() => {
+    if (autoScrolling) return;
 
-        const max =
+    function waitUntilReady() {
+
+        const maxScroll =
             document.documentElement.scrollHeight -
             window.innerHeight;
 
-        if (window.scrollY >= max) {
-            clearInterval(autoScroll);
+        // Page not fully laid out yet
+        if (maxScroll <= 5) {
+            requestAnimationFrame(waitUntilReady);
             return;
         }
 
-        window.scrollBy(0, 1);
+        autoScrolling = true;
+        animationId = requestAnimationFrame(scrollStep);
+    }
 
-    }, 25);
+    function scrollStep() {
 
+        if (!autoScrolling) return;
+
+        const maxScroll =
+            document.documentElement.scrollHeight -
+            window.innerHeight;
+
+        if (window.scrollY >= maxScroll - 2) {
+            stopAutoScroll();
+            return;
+        }
+
+        window.scrollBy(0, 0.45);
+
+        animationId = requestAnimationFrame(scrollStep);
+    }
+
+    waitUntilReady();
 }
 
 function stopAutoScroll() {
-    clearInterval(autoScroll);
+
+    autoScrolling = false;
+
+    if (animationId) {
+        cancelAnimationFrame(animationId);
+        animationId = null;
+    }
 }
 
-["wheel","touchstart","mousedown","keydown"]
-.forEach(e=>{
-    window.addEventListener(e, stopAutoScroll,{passive:true});
+[
+    "wheel",
+    "touchstart",
+    "mousedown",
+    "keydown"
+].forEach(event => {
+    window.addEventListener(event, stopAutoScroll, {
+        passive: true
+    });
 });
-
 </script>
 </div>
 
