@@ -650,21 +650,36 @@ function playMusicFor30Seconds() {
         .catch(() => {});
 }
 
-playMusicFor30Seconds();
+//playMusicFor30Seconds();
 const envelope=document.getElementById("envelope");
 const screen=document.getElementById("envelopeScreen");
 const invitation=document.getElementById("invitationContainer");
 let opened=false;
 
 envelope.addEventListener("click",async()=>{
-if(opened)return;
-opened=true;
-envelope.classList.add("open");
-setTimeout(()=>invitation.classList.remove("hidden"),350);
-try{
-    playMusicFor30Seconds();
-}catch(e){}
-setTimeout(()=>{screen.style.transition="opacity .8s ease";screen.style.opacity="0";setTimeout(()=>{screen.remove();invitation.classList.add("show");},800);},1200);
+    if(opened)return;
+    opened=true;
+    envelope.classList.add("open");
+    setTimeout(()=>invitation.classList.remove("hidden"),350);
+    try{
+        playMusicFor30Seconds();
+    }catch(e){}
+    setTimeout(() => {
+
+        screen.style.transition = "opacity .8s ease";
+        screen.style.opacity = "0";
+
+        setTimeout(() => {
+
+            screen.remove();
+            invitation.classList.add("show");
+
+            // Start auto scroll after invitation is visible
+            setTimeout(startAutoScroll, 2000);
+
+        }, 800);
+
+    }, 1200);
 });
 
 async function startMusic(){}
@@ -778,6 +793,40 @@ rsvpBtn.addEventListener("click", function () {
     ).catch(console.error);
 
 });
+
+document.documentElement.style.scrollBehavior = "smooth";
+
+let autoScroll;
+
+
+function startAutoScroll() {
+
+    autoScroll = setInterval(() => {
+
+        const max =
+            document.documentElement.scrollHeight -
+            window.innerHeight;
+
+        if (window.scrollY >= max) {
+            clearInterval(autoScroll);
+            return;
+        }
+
+        window.scrollBy(0, 1);
+
+    }, 25);
+
+}
+
+function stopAutoScroll() {
+    clearInterval(autoScroll);
+}
+
+["wheel","touchstart","mousedown","keydown"]
+.forEach(e=>{
+    window.addEventListener(e, stopAutoScroll,{passive:true});
+});
+
 </script>
 </div>
 
