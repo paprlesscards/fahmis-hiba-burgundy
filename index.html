@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Wedding Invitation</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&family=Jost:wght@300;400&family=Monsieur+La+Doulaise&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&family=Jost:wght@300;400&family=Monsieur+La+Doulaise&family=Scheherazade+New:wght@400&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -59,11 +58,7 @@ body{display:flex;justify-content:center;align-items:center;padding:12px;font-fa
     text-transform:uppercase;
     color:#cdb57c;
 }
-/* .pc-div{
-    margin:14px 0 16px;
-    color:#b8963e;
-    font-size:14px;
-} */
+
 .pc-row{
     display:flex;
     background:rgba(77,17,28,.45);
@@ -517,6 +512,159 @@ body{display:flex;justify-content:center;align-items:center;padding:12px;font-fa
     text-transform:uppercase;
     color:#d8c08a;
 }
+
+/* Scroll hint */
+
+#scrollHint{
+    position:fixed;
+    left:50%;
+    bottom:20px;
+    transform:translateX(-50%);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    z-index:999;
+
+    color:#d4b36a;
+
+    opacity:.85;
+
+    transition:opacity .5s ease;
+}
+
+#scrollHint span{
+    font-size:28px;
+    animation:bounceDown 1.6s infinite;
+}
+
+#scrollHint p{
+    margin-top:2px;
+    font-family:'Jost',sans-serif;
+    font-size:10px;
+    letter-spacing:2px;
+    text-transform:uppercase;
+}
+
+@keyframes bounceDown{
+
+    0%,100%{
+        transform:translateY(0);
+    }
+
+    50%{
+        transform:translateY(8px);
+    }
+}
+
+/* ===========================
+   Scroll Indicator
+=========================== */
+
+#scrollIndicator{
+    position:fixed;
+    left:50%;
+    bottom:18px;
+    transform:translateX(-50%);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    pointer-events:none;
+    z-index:999;
+    opacity:0;
+    transition:opacity .5s ease;
+}
+
+#scrollIndicator.show{
+    opacity:.75;
+}
+
+.scroll-star{
+    color:#b8963e;
+    font-size:12px;
+    margin-bottom:2px;
+}
+
+.scroll-arrow{
+    color:#d4b36a;
+    font-size:20px;
+    animation:scrollFloat 1.8s ease-in-out infinite;
+}
+
+@keyframes scrollFloat{
+
+    0%,100%{
+        transform:translateY(0);
+        opacity:.4;
+    }
+
+    50%{
+        transform:translateY(8px);
+        opacity:1;
+    }
+
+}
+
+/* ===========================
+   Swipe Hint
+=========================== */
+
+#scrollHint{
+    position:fixed;
+    left:50%;
+    bottom:22px;
+    transform:translateX(-50%);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    pointer-events:none;
+    z-index:1000;
+
+    opacity:0;
+    transition:opacity .5s ease;
+}
+
+#scrollHint.show{
+    opacity:1;
+}
+
+.scroll-chevron{
+    animation:swipeDown 2s ease-in-out infinite;
+}
+
+.scroll-text{
+    margin-top:6px;
+
+    font-family:'Jost',sans-serif;
+    font-size:10px;
+    font-weight:300;
+
+    letter-spacing:3px;
+    text-transform:uppercase;
+
+    color:#d4b36a;
+
+    opacity:.75;
+}
+
+@keyframes swipeDown{
+
+    0%{
+        transform:translateY(0);
+        opacity:.25;
+    }
+
+    40%{
+        transform:translateY(8px);
+        opacity:1;
+    }
+
+    100%{
+        transform:translateY(16px);
+        opacity:0;
+    }
+
+}
+
 </style></head><body>
 <div id="envelopeScreen">
 
@@ -548,7 +696,7 @@ body{display:flex;justify-content:center;align-items:center;padding:12px;font-fa
 <div class="pc-bismillah">
     بِسْمِ ٱللَّٰهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ
 </div>
-<!--div class="pc-orn">✦ ✦ ✦</div-->
+
 <p class="pc-lbl">You are invited to celebrate the</p><p class="pc-lbl">Wedding Reception of</p>
 <h1 class="pc-names">
     Fahmis Abdulla
@@ -620,8 +768,6 @@ body{display:flex;justify-content:center;align-items:center;padding:12px;font-fa
         <source src="music.mp3" type="audio/mpeg">
     </audio>
 </div>
-
-
 
 <script>
 const target=new Date("2026-07-19T17:00:00"),pad=n=>String(n).padStart(2,"0");
@@ -778,7 +924,160 @@ rsvpBtn.addEventListener("click", function () {
     ).catch(console.error);
 
 });
+
+const hint=document.getElementById("scrollHint");
+
+window.addEventListener("scroll",()=>{
+
+    if(window.scrollY>40){
+
+        hint.style.opacity="0";
+        hint.style.pointerEvents="none";
+
+    }
+
+});
+
+const scrollIndicator = document.getElementById("scrollIndicator");
+
+    // Show after invitation opens
+    setTimeout(() => {
+        scrollIndicator.classList.add("show");
+    }, 2500);
+
+    // Hide after first scroll
+    window.addEventListener("scroll", () => {
+
+        if(window.scrollY > 20){
+
+            scrollIndicator.style.opacity = "0";
+
+        }
+
+    }, { once:true });
+
+    const scrollHint = document.getElementById("scrollHint");
+
+    setTimeout(() => {
+        scrollHint.classList.add("show");
+    }, 2500);
+
+    window.addEventListener("scroll", () => {
+
+        scrollHint.style.opacity = "0";
+
+    }, { once:true });
+
+    
+    function toggleScrollHint() {
+        const hasMoreContent =
+            document.documentElement.scrollHeight >
+            window.innerHeight + 20;
+
+        if (hasMoreContent) {
+            scrollHint.classList.add("show");
+        } else {
+            scrollHint.classList.remove("show");
+        }
+    }
+
+    setTimeout(toggleScrollHint, 2500);
+
+    window.addEventListener("resize", toggleScrollHint);
+
+    window.addEventListener("scroll", () => {
+        scrollHint.classList.remove("show");
+    }, { once: true });
+
+    function gentleScrollHint() {
+
+    // Only on small screens
+    if (window.innerHeight > 850) return;
+
+    setTimeout(() => {
+
+        window.scrollBy({
+            top: 100,
+            behavior: "smooth"
+        });
+
+    }, 2200);
+
+}
+
+setTimeout(() => {
+    screen.style.transition = "opacity .8s ease";
+    screen.style.opacity = "0";
+
+    setTimeout(() => {
+        screen.remove();
+        invitation.classList.add("show");
+
+        setTimeout(() => {
+            startAutoScroll();
+        }, 2000);
+
+        gentleScrollHint();   // <-- Add this
+
+    }, 800);
+
+}, 1200);
+
+
+let autoScroll;
+let autoScrolling = false;
+
+function startAutoScroll() {
+
+    if (autoScrolling) return;
+
+    autoScrolling = true;
+
+    const start = window.pageYOffset;
+    const end = document.documentElement.scrollHeight - window.innerHeight;
+    const duration = 14000; // 14 seconds
+
+    let startTime = null;
+
+    function animate(time) {
+
+        if (!startTime) startTime = time;
+
+        const elapsed = time - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+
+        // Smooth easing
+        const ease = progress * progress * (3 - 2 * progress);
+
+        window.scrollTo({
+            top: start + (end - start) * ease
+        });
+
+        if (progress < 1 && autoScrolling) {
+            autoScroll = requestAnimationFrame(animate);
+        }
+    }
+
+    autoScroll = requestAnimationFrame(animate);
+}
+
+function stopAutoScroll() {
+
+    autoScrolling = false;
+
+    if (autoScroll) {
+        cancelAnimationFrame(autoScroll);
+    }
+}
+
+["wheel","touchstart","mousedown","keydown"].forEach(event => {
+
+    window.addEventListener(event, stopAutoScroll, {
+        passive: true
+    });
+
+});
+
 </script>
 </div>
-
 </body></html>
